@@ -11,6 +11,20 @@ export const getAllTechs = (req, res) => {
             )
         })
         .catch(err => {
-            res.status(404).send(`No techs found! \n ${err}`)
+            res.status(500).send(`No techs found! \n ${err}`)
         });
+};
+
+export const getTechById = (req, res) => {
+    const { id } = req.params;
+    pool
+        .query('SELECT * FROM users WHERE id = $1', [id])
+        .then(res.status(200).json(
+            {
+                user: res.data
+            }
+        ))
+        .catch(err => {
+            res.status(500).send(`No tech found! \n`, [id])
+        })
 };
