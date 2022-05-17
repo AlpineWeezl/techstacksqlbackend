@@ -16,7 +16,7 @@
         "type": "git",
         "url": "git+https://github.com/AlpineWeezl/techstacksqlbackend.git"
     },
-    "author": "Matthias Wieser",
+    "author": "Matthias, Marcel",
     "license": "ISC",
     "bugs": {
         "url": "https://github.com/AlpineWeezl/techstacksqlbackend/issues"
