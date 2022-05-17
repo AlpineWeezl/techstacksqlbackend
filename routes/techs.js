@@ -1,5 +1,5 @@
 import Router from "express";
-import { getAllTechs, getTechById } from "../controllers/techs";
+import { createTech, getAllTechs, getTechById } from "../controllers/techs.js";
 
 export const techsRouter = Router();
 
@@ -9,4 +9,5 @@ techsRouter
 
 techsRouter
     .route('/:id')
-    .get(getTechById);
+    .get(getTechById)
+    .post(createTech);
