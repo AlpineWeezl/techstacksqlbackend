@@ -4,5 +4,5 @@ const { Pool } = pkg;
 const connString = process.env.NODE_ELEPHANT_URL;
 
 export const pool = new Pool({
-    connectionString
+    connString
 });
