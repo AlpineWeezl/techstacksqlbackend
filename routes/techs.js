@@ -1,5 +1,5 @@
 import Router from "express";
-import { getAllTechs } from "../controllers/techs";
+import { getAllTechs, getTechById } from "../controllers/techs";
 
 export const techsRouter = Router();
 
@@ -8,5 +8,5 @@ techsRouter
     .get(getAllTechs);
 
 techsRouter
-.route('/:id')
-.get();
+    .route('/:id')
+    .get(getTechById);
