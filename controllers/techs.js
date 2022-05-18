@@ -17,15 +17,31 @@ export const createTech = (req, res) => {
 // Read ------------------------------------------------------------------------------
 export const getAllTechs = (req, res) => {
     pool
-        .query('SELECT * FROM techs')
+        .query(
+            'SELECT t.id, t.title, t.logo_link, t.wiki_link, t.creator_id, t.description, c.id cat_id, c.title cat_title, u.username FROM techs t ' +
+            'INNER JOIN categories c ' +
+            'ON t.category_id = c.id ' +
+            'LEFT JOIN users u ' +
+            'ON t.creator_id = u.id ' +
+            'ORDER BY t.id;'
+        )
         .then(data => {
-            res
-                .status(200)
-                .json(
-                    {
-                        techs: data.rows
-                    }
-                )
+            if (data.rowCount == 0) {
+                res
+                    .status(404).json(
+                        {
+                            message: 'No techs found'
+                        }
+                    );
+            } else {
+                res
+                    .status(200)
+                    .json(
+                        {
+                            techs: data.rows
+                        }
+                    );
+            }
         })
         .catch(err => {
             res.status(500).send(`No techs found! \n ${err}`)
@@ -35,16 +51,32 @@ export const getAllTechs = (req, res) => {
 export const getTechById = (req, res) => {
     const { id } = req.params;
     pool
-        .query('SELECT * FROM techs WHERE id = $1', [id])
+        .query('SELECT t.id, t.title, t.logo_link, t.wiki_link, t.creator_id, t.description, c.id cat_id, c.title cat_title, u.username FROM techs t ' +
+            'INNER JOIN categories c ' +
+            'ON t.category_id = c.id ' +
+            'LEFT JOIN users u ' +
+            'ON t.creator_id = u.id ' +
+            'WHERE t.id = $1 ' +
+            'ORDER BY t.id;'
+            , [id])
         .then(data => {
-            res.status(200).json(
-                {
-                    tech: data.rows[0]
-                }
-            )
+            if (data.rowCount == 0) {
+                res
+                    .status(404).json(
+                        {
+                            message: `No tech with id #${id} found`
+                        }
+                    );
+            } else {
+                res.status(200).json(
+                    {
+                        tech: data.rows[0]
+                    }
+                );
+            }
         })
         .catch(err => {
-            res.status(500).send(`No tech found! \n ${err}`)
+            res.status(500).send(`No tech found! \n ${err}`);
         });
 };
 // Update ----------------------------------------------------------------------------
@@ -66,5 +98,19 @@ export const updateTechById = (req, res) => {
 }
 // Delete ----------------------------------------------------------------------------
 export const deleteTechById = (req, res) => {
-
+    const { id } = req.params;
+    pool
+        .query('DELETE FROM techs WHERE id = $1', [id])
+        .then(data => {
+            res.status(200).json(
+                {
+                    message: `Tech with id #${id} successfully deleted`
+                }
+            );
+        })
+        .catch(err => res.status(500).json(
+            {
+                message: `Could not delete Tech with id #${id}!`
+            }
+        ))
 }
