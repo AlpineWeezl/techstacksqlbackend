@@ -3,13 +3,21 @@ import { getAllCategories, getCategoryById, createCategory, deleteCategoryById, 
 
 export const categoriesRouter = Router();
 
+const error = () => {
+    return({
+         message: 'Opps, something went wrong!'
+     });
+ };
+
 categoriesRouter
     .route('/')
     .get(getAllCategories)
-    .post(createCategory);
+    .post(createCategory)
+    .all(error);
 
 categoriesRouter
     .route('/:id')
     .get(getCategoryById)
     .put(updateCategory)
-    .delete(deleteCategoryById);
+    .delete(deleteCategoryById)
+    .all(error);
