@@ -11,8 +11,11 @@ const port = process.env.PORT || 3000;
 app.use(cors());
 app
     .get('/cors', (req, res) => {
-        res.set('Access-Control-Allow-Origin', '*');
-        res.send({ "msg": "This has CORS enabled 🎈" })
+        res.header("Access-Control-Allow-Origin", '*');
+        res.header("Access-Control-Allow-Credentials", true);
+        res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+        res.header("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
+        next();
     })
 app.use(express.json());
 app.use('/api/categories', categoriesRouter)
