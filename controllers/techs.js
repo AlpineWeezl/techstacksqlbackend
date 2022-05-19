@@ -114,3 +114,30 @@ export const deleteTechById = (req, res) => {
             }
         ))
 }
+
+
+//ADVANCED-READ ---------------------------------------------------
+
+export const getTechsByCategoryId = (req, res) => {
+    const { cat_id } = req.params;
+    pool
+      .query("SELECT * FROM techs WHERE category_id = $1;", [cat_id])
+      .then((data) => {
+        if (data.rowCount == 0) {
+          res.status(404).json(
+            {
+              message: 'No related techs found!'
+            }
+          );
+        } else {
+          res.status(200).json(
+            {
+              techs: data.rows,
+            }
+          );
+        }
+        })
+      .catch((err) => {
+        res.status(500).send(`No related techs for ${cat_id} found! \n ${err}`);
+      });
+  };

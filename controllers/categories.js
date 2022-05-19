@@ -29,7 +29,7 @@ export const getAllCategories = (req, res) => {
         if (data.rowCount == 0) {
           res.status(404).json(
             {
-              message: 'No category found!'
+              message: 'No categories found!'
             }
           );
         } else {
