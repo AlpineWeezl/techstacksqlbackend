@@ -11,7 +11,7 @@ const port = process.env.PORT || 3000;
 app.use(cors());
 app
     .get('/cors', (req, res) => {
-        res.set('Access-Control-Allow-Origin', process.env.CORS);
+        res.set('Access-Control-Allow-Origin', '*');
         res.send({ "msg": "This has CORS enabled 🎈" })
     })
 app.use(express.json());
