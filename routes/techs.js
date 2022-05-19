@@ -1,5 +1,5 @@
 import Router from "express";
-import { createTech, deleteTechById, getAllTechs, getTechById, updateTechById } from "../controllers/techs.js";
+import { createTech, deleteTechById, getAllTechs, getTechById, getTechsByCategoryId, updateTechById } from "../controllers/techs.js";
 
 export const techsRouter = Router();
 
@@ -13,3 +13,7 @@ techsRouter
     .get(getTechById)
     .put(updateTechById)
     .delete(deleteTechById);
+
+techsRouter
+    .route('/category/:cat_id')
+    .get(getTechsByCategoryId)
