@@ -20,5 +20,12 @@ app
 app.use(express.json());
 app.use('/api/categories', categoriesRouter)
 app.use('/api/techs', techsRouter)
+app.use('*', (req, res) => {
+    res.status(500).json(
+        {
+            error: 'Route not defined'
+        }
+    )
+});
 
 app.listen(port, () => console.log(`The server is listening on port ${port}`));

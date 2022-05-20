@@ -9,7 +9,11 @@ export const createTech = (req, res) => {
     const { title, description, logo_link, wiki_link, creator_id, category_id } = req.body;
     console.log(pool);
     pool
-        .query('INSERT INTO techs (title, description, logo_link, wiki_link, creator_id, category_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *', [title, description, logo_link, wiki_link, creator_id, category_id])
+        .query(
+            'INSERT INTO techs (title, description, logo_link, wiki_link, creator_id, category_id)' +
+            'VALUES ($1, $2, $3, $4, $5, $6) ' +
+            'RETURNING *;'
+            , [title, description, logo_link, wiki_link, creator_id, category_id])
         .then(data => res.status(201).json({ tech: data.rows[0] }))
         .catch(err => res.status(500).json({ error: err }));
 }
@@ -84,7 +88,11 @@ export const updateTechById = (req, res) => {
     const { id } = req.params;
     const { title, description, logo_link, wiki_link } = req.body;
     pool
-        .query('UPDATE techs SET title = $1, description = $2, logo_link = $3, wiki_link = $4 WHERE id = $5 RETURNING *;', [title, description, logo_link, wiki_link, id])
+        .query(
+            'UPDATE techs SET title = $1, description = $2, logo_link = $3, wiki_link = $4 ' +
+            'WHERE id = $5 ' +
+            'RETURNING *;'
+            , [title, description, logo_link, wiki_link, id])
         .then(data => {
             res.status(200).json(
                 {
@@ -100,7 +108,9 @@ export const updateTechById = (req, res) => {
 export const deleteTechById = (req, res) => {
     const { id } = req.params;
     pool
-        .query('DELETE FROM techs WHERE id = $1', [id])
+        .query(
+            'DELETE FROM techs ' +
+            'WHERE id = $1', [id])
         .then(data => {
             res.status(200).json(
                 {
@@ -121,23 +131,25 @@ export const deleteTechById = (req, res) => {
 export const getTechsByCategoryId = (req, res) => {
     const { cat_id } = req.params;
     pool
-      .query("SELECT * FROM techs WHERE category_id = $1;", [cat_id])
-      .then((data) => {
-        if (data.rowCount == 0) {
-          res.status(404).json(
-            {
-              message: 'No related techs found!'
+        .query(
+            'SELECT * FROM techs ' +
+            'WHERE category_id = $1;', [cat_id])
+        .then((data) => {
+            if (data.rowCount == 0) {
+                res.status(404).json(
+                    {
+                        message: 'No related techs found!'
+                    }
+                );
+            } else {
+                res.status(200).json(
+                    {
+                        techs: data.rows,
+                    }
+                );
             }
-          );
-        } else {
-          res.status(200).json(
-            {
-              techs: data.rows,
-            }
-          );
-        }
         })
-      .catch((err) => {
-        res.status(500).send(`No related techs for ${cat_id} found! \n ${err}`);
-      });
-  };
+        .catch((err) => {
+            res.status(500).send(`No related techs for ${cat_id} found! \n ${err}`);
+        });
+};
