@@ -7,9 +7,9 @@ import { pool } from "../db/pg.js";
 // Create ----------------------------------------------------------------------------
 export const createTech = (req, res) => {
     const { title, description, logo_link, wiki_link, creator_id, category_id } = req.body;
-
+    console.log(pool);
     pool
-        .query('INSERT INTO techs (title, description, logo_link, wiki_link, creator_id, category) VALUES ($1, $2, $3, $4, $5, 6) RETURNING *', [title, description, logo_link, wiki_link, creator_id, category_id])
+        .query('INSERT INTO techs (title, description, logo_link, wiki_link, creator_id, category_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *', [title, description, logo_link, wiki_link, creator_id, category_id])
         .then(data => res.status(201).json({ tech: data.rows[0] }))
         .catch(err => res.status(500).json({ error: err }));
 }
